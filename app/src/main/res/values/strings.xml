@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Demo</string>
+    <string name="event_name">Event Name</string>
+    <string name="likes">Likes</string>
+    <string name="date">Date</string>
+    <string name="shares">Shares</string>
+    <string name="views">Views</string>
+</resources>
