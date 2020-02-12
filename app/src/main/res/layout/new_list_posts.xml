@@ -17,9 +17,9 @@
             android:layout_alignParentTop="true"
             android:id="@+id/imag1"
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:layout_centerHorizontal="true"
-            android:contentDescription="image" />
+            android:contentDescription="@string/image" />
 
 
         <TextView
@@ -45,6 +45,8 @@
             android:textSize="20sp"
             android:textColor="#000000"
             android:gravity="end"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
             android:text="@string/date" />
 
@@ -54,6 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:weightSum="3">
 
             <TextView
@@ -63,9 +67,9 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="12sp"
                 android:textColor="#000000"
-                android:gravity="end"
+                android:gravity="start"
                 android:layout_marginBottom="5dp"
                 android:text="@string/likes" />
 
@@ -76,9 +80,9 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="12sp"
                 android:textColor="#000000"
-                android:gravity="end"
+                android:gravity="start"
                 android:layout_marginBottom="5dp"
                 android:text="@string/views" />
 
@@ -89,9 +93,9 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="12sp"
                 android:textColor="#000000"
-                android:gravity="end"
+                android:gravity="start"
                 android:layout_marginBottom="5dp"
                 android:text="@string/shares" />
 

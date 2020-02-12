@@ -1,8 +1,14 @@
 <resources>
-    <string name="app_name">Demo</string>
+    <string name="app_name">Posts</string>
     <string name="event_name">Event Name</string>
     <string name="likes">Likes</string>
     <string name="date">Date</string>
     <string name="shares">Shares</string>
     <string name="views">Views</string>
+    <string name="sort_by">Sort By</string>
+    <string name="sortlikes">Likes</string>
+    <string name="sortviews">Views</string>
+    <string name="sortshares">Shares</string>
+    <string name="sortdate">Date</string>
+    <string name="image">image</string>
 </resources>

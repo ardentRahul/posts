@@ -3,6 +3,7 @@
     <domain-config cleartextTrafficPermitted = "true"
         tools:ignore="NetworkSecurityConfig">
         <domain includeSubdomains = "true">mocky.io</domain>
+        <domain includeSubdomains = "true">i.imgur.com</domain>
         <trust-anchors>
             <certificates src="system"/>
         </trust-anchors>

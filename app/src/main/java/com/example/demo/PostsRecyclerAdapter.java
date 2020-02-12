@@ -14,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.demo.Model.Posts;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,10 +120,11 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             super.onBind(position);
             Posts item = mPostItems.get(position);
             txtEventName.setText(item.getEvent_name());
-            txtLikes.setText(String.valueOf(item.getLikes()));
-            txtDate.setText(String.valueOf(item.getEvent_Date()));
-            txtVies.setText(String.valueOf(item.getViews()));
-            txtShares.setText(String.valueOf(item.getShares()));
+            txtLikes.setText("Likes: "+String.valueOf(item.getLikes()));
+            txtDate.setText(String.valueOf(new SimpleDateFormat("dd:mm:yyyy hh:mm a", Locale.ENGLISH)
+            .format(new Date(item.getEvent_Date() * 1000))));
+            txtVies.setText("Views: "+String.valueOf(item.getViews()));
+            txtShares.setText("Shares: "+String.valueOf(item.getShares()));
 
             Picasso.with(context)
                     .load(item.getThumbnail_image())

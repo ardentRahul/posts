@@ -6,9 +6,13 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +23,7 @@ import com.example.demo.Model.Posts;
 import com.example.demo.Network.GetPosts;
 import com.example.demo.Network.RetrofitClient;
 import com.example.demo.Room.DatabaseClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,26 +37,20 @@ import retrofit2.Response;
 
 import static com.example.demo.PaginationListener.PAGE_START;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private static final String TAG = "MainActivity";
     @BindView(R.id.temperatureRecyclerView)
     RecyclerView mRecyclerView;
-    @BindView(R.id.like)
-    Button btn;
-    @BindView(R.id.view)
-    Button btn1;
-    @BindView(R.id.share)
-    Button btn2;
-    @BindView(R.id.dat)
-    Button btn3;
     @BindView(R.id.main_progress)
     ProgressBar progressBar;
+    @BindView(R.id.floatingActionButton)
+    FloatingActionButton floatingActionButton;
 
     private PostsRecyclerAdapter adapter;
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
-    private int totalPage = 10;
+    private int totalPage = 4;
     private boolean isLoading = false;
     int itemCount = 0;
     List<Posts> posts1;
@@ -63,11 +62,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mRecyclerView.setHasFixedSize(true);
-        // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         adapter = new PostsRecyclerAdapter(new ArrayList<Posts>(),this);
         mRecyclerView.setAdapter(adapter);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(MainActivity.this, v);
+                popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) MainActivity.this);
+                popup.inflate(R.menu.sort_posts);
+                popup.show();
+            }
+        });
 
         if (CheckInternetConnection()){
             fetchPosts();
@@ -88,64 +96,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }else{
+            Toast.makeText(this, "No Internet...", Toast.LENGTH_SHORT).show();
             GetAppPosts getAppPosts = new GetAppPosts();
             getAppPosts.execute();
         }
-
-
-
-        btn.setOnClickListener(v -> {
-            itemCount = 0;
-            currentPage = PAGE_START;
-            isLastPage = false;
-            adapter.clear();
-
-            Collections.sort(posts1, Posts.likesComparator);
-            for (Posts posts : posts1){
-                adapter.addItems(Collections.singletonList(posts));
-            }
-            adapter.notifyDataSetChanged();
-        });
-
-        btn1.setOnClickListener(v -> {
-            itemCount = 0;
-            currentPage = PAGE_START;
-            isLastPage = false;
-            adapter.clear();
-
-            Collections.sort(posts1, Posts.viewsComparator);
-            for (Posts posts : posts1){
-                adapter.addItems(Collections.singletonList(posts));
-            }
-            adapter.notifyDataSetChanged();
-        });
-
-        btn2.setOnClickListener(v -> {
-            itemCount = 0;
-            currentPage = PAGE_START;
-            isLastPage = false;
-            adapter.clear();
-
-            Collections.sort(posts1, Posts.sharesComparator);
-            for (Posts posts : posts1){
-                adapter.addItems(Collections.singletonList(posts));
-            }
-            adapter.notifyDataSetChanged();
-        });
-
-        btn3.setOnClickListener(v -> {
-            itemCount = 0;
-            currentPage = PAGE_START;
-            isLastPage = false;
-            adapter.clear();
-
-            Collections.sort(posts1, Posts.dateComparator);
-            for (Posts posts : posts1){
-                adapter.addItems(Collections.singletonList(posts));
-            }
-            adapter.notifyDataSetChanged();
-        });
     }
+
+
 
 
     private void fetchPosts(){
@@ -159,9 +116,9 @@ public class MainActivity extends AppCompatActivity {
                        DemoData demoData = response.body();
                        progressBar.setVisibility(View.GONE);
                        posts1 = demoData.getPosts();
+                       floatingActionButton.setVisibility(View.VISIBLE);
                        if (currentPage != PAGE_START) adapter.removeLoading();
                        adapter.addItems(posts1);
-                       // check weather is last page or not
                        if (currentPage < totalPage) {
                            adapter.addLoading();
                        } else {
@@ -183,6 +140,63 @@ public class MainActivity extends AppCompatActivity {
        },1500);
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.sortLikes:
+                itemCount = 0;
+                currentPage = PAGE_START;
+                isLastPage = false;
+                adapter.clear();
+
+                Collections.sort(posts1, Posts.likesComparator);
+                for (Posts posts : posts1){
+                    adapter.addItems(Collections.singletonList(posts));
+                }
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.sortViews:
+                itemCount = 0;
+                currentPage = PAGE_START;
+                isLastPage = false;
+                adapter.clear();
+
+                Collections.sort(posts1, Posts.viewsComparator);
+                for (Posts posts : posts1){
+                    adapter.addItems(Collections.singletonList(posts));
+                }
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.sortShares:
+                itemCount = 0;
+                currentPage = PAGE_START;
+                isLastPage = false;
+                adapter.clear();
+
+                Collections.sort(posts1, Posts.sharesComparator);
+                for (Posts posts : posts1){
+                    adapter.addItems(Collections.singletonList(posts));
+                }
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.sortDate:
+                itemCount = 0;
+                currentPage = PAGE_START;
+                isLastPage = false;
+                adapter.clear();
+
+                Collections.sort(posts1, Posts.dateComparator);
+                for (Posts posts : posts1){
+                    adapter.addItems(Collections.singletonList(posts));
+                }
+                adapter.notifyDataSetChanged();
+                break;
+            default:
+
+        }
+        return false;
+    }
+
     public class GetAppPosts extends AsyncTask<Void,Void,List<Posts>>{
 
         List<Posts> postsList;
@@ -199,9 +213,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Posts> posts) {
             super.onPostExecute(posts);
+            progressBar.setVisibility(View.GONE);
             adapter.clear();
             adapter.addItems(postsList);
-            adapter.notifyDataSetChanged();
+            if (postsList.isEmpty()){
+                Toast.makeText(MainActivity.this, "There aren't any posts yet...", Toast.LENGTH_LONG).show();
+            }
+            else{
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -229,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        //Means that we are connected to a network (mobile or wi-fi)
         connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
                 .getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
